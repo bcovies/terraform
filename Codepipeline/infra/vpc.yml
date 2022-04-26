@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  Template responsable to create all network environment base for VPC's Cluster.
+Parameters: 
+  ClusterName:
+    Type: String
+  EnvironmentTag:
+    Type: String
+  VPCCidrBlock:
+    Type: String
+  SubnetCidrBlock:
+    Type: String
+
+Resources: 
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VPCCidrBlock
+      EnableDnsSupport: true
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentTag
+
+  Subnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Select 
+        - 0
+        - !GetAZs 
+          Ref: AWS::Region 
+      VpcId: !Ref VPC
+      CidrBlock: !Sub ${SubnetCidrBlock}
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentTag

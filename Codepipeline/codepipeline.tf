@@ -21,7 +21,7 @@ resource "aws_codepipeline" "codepipeline" {
 
       configuration = {
         ConnectionArn    = aws_codestarconnections_connection.example.arn
-        FullRepositoryId = "bcovies/aws-cloudformation"
+        FullRepositoryId = "bcovies/terraform"
         BranchName       = "development"
       }
     }
@@ -36,7 +36,7 @@ resource "aws_codepipeline" "codepipeline" {
       category        = "Deploy"
       owner           = "AWS"
       provider        = "CloudFormation"
-      input_artifacts = ["build_output"]
+      input_artifacts = ["source_output"]
       version         = "1"
 
       configuration = {
@@ -44,7 +44,7 @@ resource "aws_codepipeline" "codepipeline" {
         Capabilities   = "CAPABILITY_AUTO_EXPAND,CAPABILITY_IAM"
         OutputFileName = "CreateStackOutput.json"
         StackName      = "MyStack"
-        TemplatePath   = "build_output::infra/vpc.yaml"
+        TemplatePath   = "source_output::Codepipeline/infra/vpc.yaml"
       }
     }
   }
