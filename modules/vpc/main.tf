@@ -22,7 +22,7 @@ resource "aws_security_group" "vpc_internal_sg" {
   ingress {
     description      = "Allows any protocol for internal use"
     from_port        = 0
-    to_port          = 0
+    to_port          = 65535
     protocol         = "tcp"
     cidr_blocks      = [aws_vpc.vpc.cidr_block]
   }
@@ -30,14 +30,14 @@ resource "aws_security_group" "vpc_internal_sg" {
   egress {
     description      = "Allows any protocol to internet"
     from_port        = 0
-    to_port          = 0
+    to_port          = 65535
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
 
   tags = {
-    Name        = "${var.tag_environment}_${var.cluster_name}"
+    Name        = "${var.tag_environment}_${var.cluster_name}_vpc_sg"
     Environment = "${var.tag_environment}"
   }
 }
@@ -51,7 +51,7 @@ resource "aws_subnet" "vpc_public_subnet_a" {
   cidr_block        = var.cidr_subnet
   availability_zone = var.az
   tags = {
-    Name        = "${var.tag_environment}_${var.cluster_name}"
+    Name        = "${var.tag_environment}_${var.cluster_name}_public_subnet_a"
     Environment = "${var.tag_environment}"
   }
 }
