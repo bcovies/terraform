@@ -1,17 +1,31 @@
-#
-# Secutiry Group Public SSH
+# 
+# Security Group Public SSH
 #
 resource "aws_security_group" "ec2_public_ssh_sg" {
-  vpc_id = var.vpc_id
+  name        = "${var.tag_environment}_${var.cluster_name}"
+  description = "Allows SSH protocol for external use"
+  vpc_id      = var.vpc_id
+
   ingress {
+    description = "Allows any protocol for internal use"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = [var.vpc_cidr_block_external]
   }
+
+  egress {
+    description      = "Allows any protocol to internet"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = [var.vpc_cidr_block_external]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
   tags = {
-    "Name"        = ""
-    "Environment" = ""
+    Name        = "${var.tag_environment}_${var.cluster_name}_vpc_sg"
+    Environment = "${var.tag_environment}"
   }
 }
 

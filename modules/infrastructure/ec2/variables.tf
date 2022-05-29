@@ -1,3 +1,15 @@
+variable "cluster_name" {
+  description = "Environment that all services are hosted | DEV | STAGE | PROD |"
+  type        = string
+  default     = "cluster-default"
+}
+
+variable "tag_environment" {
+  description = "Environment that all services are hosted | DEV | STAGE | PROD |"
+  type        = string
+  default     = "dev"
+}
+
 variable "ec2_ami" {
   type = map(any)
   default = {
@@ -20,9 +32,9 @@ variable "ec2_public_ssh_sg_id" {
 }
 
 variable "vpc_id" {
-  
+
 }
 
 variable "vpc_public_subnet_a_id" {
-  
+
 }

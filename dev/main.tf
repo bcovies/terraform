@@ -2,7 +2,7 @@
 # M O D U L E    V P C
 #
 module "vpc" {
-  source = "../modules/vpc"
+  source = "../modules/infrastructure/vpc"
   vpc_id = module.vpc.vpc_id
   vpc_public_subnet_a_id = module.vpc.vpc_public_subnet_a_id
   vpc_public_route_table_a_id = module.vpc.vpc_public_route_table_a_id
@@ -18,7 +18,7 @@ module "ec2" {
   depends_on = [
     module.vpc
   ]
-  source = "../modules/ec2"
+  source = "../modules/infrastructure/ec2"
   ec2_public_ssh_sg_id = module.ec2.ec2_public_ssh_sg_id
   vpc_id = module.vpc.vpc_id
   vpc_public_subnet_a_id = module.vpc.vpc_public_subnet_a_id
