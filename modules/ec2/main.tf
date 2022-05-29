@@ -1,66 +1,41 @@
-
-##################
-###  EAST -- 1 ###
-##################
-resource "aws_security_group" "public_ssh_east_1" {
-  name = "public-ssh"
-  description = "Acesso SSH Publico"
-
+#
+# Secutiry Group Public SSH
+#
+resource "aws_security_group" "ec2_public_ssh_sg" {
+  vpc_id = var.vpc_id
   ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = "${var.cidr_blocks}" 
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr_block_external]
   }
   tags = {
-    "Name" = "sg-public-access-ssh-brunosouto"
-    "Environment" = "TST"
-    "Owner" = "Bruno Souto"
+    "Name"        = ""
+    "Environment" = ""
   }
 }
 
-resource "aws_instance" "ec2_test_east_1" {
-  count = 1
-  ami = var.ec2_ami.us-east-1
-  instance_type = "t2.micro"
-  key_name = var.ec2_key
-  vpc_security_group_ids = [ "${aws_security_group.public_ssh_east_1.id}" ]
-  tags = {
-    "Name" = "terraform-brunosouto-ec2"
-    "Environment" = "TST"
-    "Owner" = "Bruno Souto"
-  }
+#
+# Ec2 Instance 
+#
+# resource "aws_instance" "ec2_test_east_1" {
+#   subnet_id                   = var.vpc_public_subnet_a_id
+#   associate_public_ip_address = true
+#   count                       = 1
+#   ami                         = var.ec2_ami.us-east-1
+#   instance_type               = "t2.micro"
+#   key_name                    = var.ec2_key
+#   vpc_security_group_ids      = [var.ec2_public_ssh_sg_id]
+#   tags = {
+#     "Name"        = ""
+#     "Environment" = ""
+#   }
+# }
+
+#
+# Outputs
+#
+output "ec2_public_ssh_sg_id" {
+  value = aws_security_group.ec2_public_ssh_sg.id
 }
 
-
-##################
-###  EAST -- 2 ###
-##################
-resource "aws_security_group" "public_ssh_east_2" {
-  name = "public-ssh"
-  description = "Acesso SSH Publico"
-  provider = aws.west
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = "${var.cidr_blocks}" 
-  }
-  tags = {
-    "Name" = "sg-public-access-ssh-brunosouto"
-    "Environment" = "TST"
-  }
-}
-
-resource "aws_instance" "ec2_test_east_2" {
-  provider = aws.west
-  count = 1
-  ami = var.ec2_ami.us-east-2
-  instance_type = "t2.micro"
-  key_name = var.ec2_key
-  vpc_security_group_ids = [ "${aws_security_group.public_ssh_east_2.id}" ]
-  tags = {
-    "Name" = "terraform-brunosouto-ec2"
-    "Environment" = "TST"
-  }
-}

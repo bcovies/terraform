@@ -15,7 +15,7 @@ resource "aws_vpc" "vpc" {
 # Security Group
 #
 resource "aws_security_group" "vpc_internal_sg" {
-  depends_on = [var.vpc_id]
+  depends_on  = [var.vpc_id]
   name        = "${var.tag_environment}_${var.cluster_name}"
   description = "Allows any protocol for internal use"
   vpc_id      = var.vpc_id
@@ -47,8 +47,6 @@ resource "aws_security_group" "vpc_internal_sg" {
 # Internet Gateway
 #
 resource "aws_internet_gateway" "vpc_internet_gateway" {
-  depends_on = [var.vpc_id]
-  # vpc_id     = var.vpc_id
 
   tags = {
     Name        = "${var.tag_environment}_${var.cluster_name}_vpc_internet_gateway"
@@ -68,7 +66,7 @@ resource "aws_internet_gateway_attachment" "vpc_internet_gateway_attachment" {
 # Public Subnet A
 #
 resource "aws_subnet" "vpc_public_subnet_a" {
-  depends_on = [var.vpc_id]
+  depends_on        = [var.vpc_id]
   vpc_id            = var.vpc_id
   cidr_block        = var.cidr_subnet_a
   availability_zone = var.az
@@ -83,7 +81,6 @@ resource "aws_subnet" "vpc_public_subnet_a" {
 #
 resource "aws_route_table" "vpc_public_route_table_a" {
   vpc_id     = var.vpc_id
-  depends_on = [var.vpc_id]
 
   tags = {
     Name        = "${var.tag_environment}_${var.cluster_name}_vpc_route_table"
