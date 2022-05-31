@@ -2,7 +2,7 @@
 # Security Group Public SSH
 #
 resource "aws_security_group" "ec2_public_ssh_sg" {
-  name        = "${var.tag_environment}_${var.cluster_name}"
+  name        = "${var.tag_environment}-${var.cluster_name}-ec2-ssh-sg"
   description = "Allows SSH protocol for external use"
   vpc_id      = var.vpc_id
 
@@ -24,7 +24,7 @@ resource "aws_security_group" "ec2_public_ssh_sg" {
   }
 
   tags = {
-    Name        = "${var.tag_environment}_${var.cluster_name}_vpc_sg"
+    Name        = "${var.tag_environment}_${var.cluster_name}_ec2_ssh_sg"
     Environment = "${var.tag_environment}"
   }
 }
@@ -41,15 +41,7 @@ resource "aws_security_group" "ec2_public_ssh_sg" {
 #   key_name                    = var.ec2_key
 #   vpc_security_group_ids      = [var.ec2_public_ssh_sg_id]
 #   tags = {
-#     "Name"        = ""
-#     "Environment" = ""
+#     Name        = "${var.tag_environment}_${var.cluster_name}_ec2"
+#     Environment = "${var.tag_environment}"
 #   }
 # }
-
-#
-# Outputs
-#
-output "ec2_public_ssh_sg_id" {
-  value = aws_security_group.ec2_public_ssh_sg.id
-}
-

@@ -16,7 +16,7 @@ resource "aws_vpc" "vpc" {
 #
 resource "aws_security_group" "vpc_internal_sg" {
   depends_on  = [var.vpc_id]
-  name        = "${var.tag_environment}_${var.cluster_name}"
+  name        = "${var.tag_environment}-${var.cluster_name}-sg"
   description = "Allows any protocol for internal use"
   vpc_id      = var.vpc_id
 
@@ -62,6 +62,8 @@ resource "aws_internet_gateway_attachment" "vpc_internet_gateway_attachment" {
   vpc_id              = var.vpc_id
 }
 
+# =======================================================================================
+
 #
 # Public Subnet A
 #
@@ -69,7 +71,7 @@ resource "aws_subnet" "vpc_public_subnet_a" {
   depends_on        = [var.vpc_id]
   vpc_id            = var.vpc_id
   cidr_block        = var.cidr_subnet_a
-  availability_zone = var.az
+  availability_zone = var.az0
   tags = {
     Name        = "${var.tag_environment}_${var.cluster_name}_public_subnet_a"
     Environment = "${var.tag_environment}"
@@ -77,19 +79,19 @@ resource "aws_subnet" "vpc_public_subnet_a" {
 }
 
 #
-# Route Table
+# Route Table A
 #
 resource "aws_route_table" "vpc_public_route_table_a" {
-  vpc_id     = var.vpc_id
+  vpc_id = var.vpc_id
 
   tags = {
-    Name        = "${var.tag_environment}_${var.cluster_name}_vpc_route_table"
+    Name        = "${var.tag_environment}_${var.cluster_name}_vpc_route_table_a"
     Environment = "${var.tag_environment}"
   }
 }
 
 #
-# Route 
+# Route A
 #
 resource "aws_route" "vpc_route_public_a" {
   route_table_id         = var.vpc_public_route_table_a_id
@@ -99,29 +101,54 @@ resource "aws_route" "vpc_route_public_a" {
 }
 
 #
-# Route Table Association
+# Route Table Association A
 #
 resource "aws_route_table_association" "vpc_route_table_public_a_association" {
   subnet_id      = var.vpc_public_subnet_a_id
   route_table_id = var.vpc_public_route_table_a_id
 }
+# =======================================================================================
 
 #
-# Outputs
+# Public Subnet B
 #
-output "vpc_id" {
-  value = aws_vpc.vpc.id
+resource "aws_subnet" "vpc_public_subnet_b" {
+  depends_on        = [var.vpc_id]
+  vpc_id            = var.vpc_id
+  cidr_block        = var.cidr_subnet_b
+  availability_zone = var.az1
+  tags = {
+    Name        = "${var.tag_environment}_${var.cluster_name}_public_subnet_b"
+    Environment = "${var.tag_environment}"
+  }
 }
 
-output "vpc_internet_gateway_id" {
-  value = aws_internet_gateway.vpc_internet_gateway.id
+#
+# Route Table B
+#
+resource "aws_route_table" "vpc_public_route_table_b" {
+  vpc_id = var.vpc_id
+
+  tags = {
+    Name        = "${var.tag_environment}_${var.cluster_name}_vpc_route_table_b"
+    Environment = "${var.tag_environment}"
+  }
 }
 
-output "vpc_public_route_table_a_id" {
-  value = aws_route_table.vpc_public_route_table_a.id
+#
+# Route B
+#
+resource "aws_route" "vpc_route_public_b" {
+  route_table_id         = var.vpc_public_route_table_b_id
+  gateway_id             = var.vpc_internet_gateway_id
+  destination_cidr_block = var.vpc_cidr_block_external
+  depends_on             = [var.vpc_public_route_table_b_id]
 }
 
-output "vpc_public_subnet_a_id" {
-  value = aws_subnet.vpc_public_subnet_a.id
+#
+# Route Table Association B
+#
+resource "aws_route_table_association" "vpc_route_table_public_b_association" {
+  subnet_id      = var.vpc_public_subnet_b_id
+  route_table_id = var.vpc_public_route_table_b_id
 }
-

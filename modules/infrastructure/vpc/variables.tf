@@ -21,14 +21,25 @@ variable "cidr_subnet_a" {
   default = "192.168.1.0/24"
 }
 
+variable "cidr_subnet_b" {
+  type    = string
+  default = "192.168.2.0/24"
+}
+
 variable "vpc_cidr_block_external" {
   type    = string
   default = "0.0.0.0/0"
 }
 
-variable "az" {
+variable "az0" {
   type    = string
   default = "us-east-1a"
+}
+
+
+variable "az1" {
+  type    = string
+  default = "us-east-1b"
 }
 
 variable "vpc_id" {
@@ -44,5 +55,13 @@ variable "vpc_public_route_table_a_id" {
 }
 
 variable "vpc_public_subnet_a_id" {
+
+}
+
+variable "vpc_public_route_table_b_id" {
+
+}
+
+variable "vpc_public_subnet_b_id" {
 
 }
