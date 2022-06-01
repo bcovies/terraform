@@ -14,21 +14,6 @@ module "vpc" {
 }
 
 #
-# M O D U L E    E C 2
-#
-module "ec2" {
-  depends_on = [
-    module.vpc
-  ]
-  source                 = "../modules/infrastructure/ec2"
-  ec2_public_ssh_sg_id   = module.ec2.ec2_public_ssh_sg_id
-  vpc_id                 = module.vpc.vpc_id
-  vpc_public_subnet_a_id = module.vpc.vpc_public_subnet_a_id
-  tag_environment        = var.tag_environment
-  cluster_name           = var.cluster_name
-}
-
-#
 # M O D U L E    E L B
 #
 module "elb" {
@@ -46,4 +31,24 @@ module "elb" {
   elb_default_tg_id           = module.elb.elb_default_tg_id
   tag_environment             = var.tag_environment
   cluster_name                = var.cluster_name
+}
+
+#
+# M O D U L E    E C 2
+#
+module "ec2" {
+  depends_on = [
+    module.vpc,
+    module.elb
+  ]
+  source                               = "../modules/infrastructure/ec2"
+  ec2_public_ssh_sg_id                 = module.ec2.ec2_public_ssh_sg_id
+  ecs_cluster_id                       = module.ec2.ecs_cluster_id
+  ecs_cluster_name                     = module.ec2.ecs_cluster_name
+  ecs_launch_configuration_template_id = module.ec2.ecs_launch_configuration_template_id
+  vpc_id                               = module.vpc.vpc_id
+  vpc_public_subnet_a_id               = module.vpc.vpc_public_subnet_a_id
+  vpc_public_subnet_b_id      = module.vpc.vpc_public_subnet_b_id
+  tag_environment                      = var.tag_environment
+  cluster_name                         = var.cluster_name
 }

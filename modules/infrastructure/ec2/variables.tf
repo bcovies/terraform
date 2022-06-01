@@ -18,6 +18,15 @@ variable "ec2_ami" {
   }
 }
 
+variable "ec2_ecs_ami" {
+  type    = string
+  default = "ami-04ca8c64160cd4188"
+}
+variable "ec2_instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+
 variable "vpc_cidr_block_external" {
   type    = string
   default = "0.0.0.0/0"
@@ -36,5 +45,21 @@ variable "vpc_id" {
 }
 
 variable "vpc_public_subnet_a_id" {
+
+}
+
+variable "vpc_public_subnet_b_id" {
+
+}
+
+variable "ecs_cluster_id" {
+
+}
+
+variable "ecs_cluster_name" {
+
+}
+
+variable "ecs_launch_configuration_template_id" {
 
 }
