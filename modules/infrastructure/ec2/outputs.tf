@@ -24,3 +24,19 @@ output "ecs_auto_scaling_group_id" {
 output "ecs_auto_scaling_group_name" {
   value = aws_autoscaling_group.ecs_auto_scaling_group.name
 }
+
+output "ecs_auto_scaling_up_policy_id" {
+  value = aws_autoscaling_policy.ecs_auto_scaling_up_policy.id
+}
+
+output "ecs_auto_scaling_up_policy_arn" {
+  value = aws_autoscaling_policy.ecs_auto_scaling_up_policy.arn
+}
+
+output "ecs_auto_scaling_down_policy_id" {
+  value = aws_autoscaling_policy.ecs_auto_scaling_down_policy.id
+}
+
+output "ecs_auto_scaling_down_policy_arn" {
+  value = aws_autoscaling_policy.ecs_auto_scaling_down_policy.arn
+}

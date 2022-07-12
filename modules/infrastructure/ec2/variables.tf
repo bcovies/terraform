@@ -71,3 +71,19 @@ variable "ecs_auto_scaling_group_id" {
 variable "ecs_auto_scaling_group_name" {
 
 }
+
+variable "ecs_auto_scaling_up_policy_id" {
+
+}
+
+variable "ecs_auto_scaling_down_policy_id" {
+
+}
+
+variable "ecs_auto_scaling_up_policy_arn" {
+
+}
+
+variable "ecs_auto_scaling_down_policy_arn" {
+
+}

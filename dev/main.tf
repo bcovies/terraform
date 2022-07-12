@@ -9,6 +9,7 @@ module "vpc" {
   vpc_public_route_table_a_id = module.vpc.vpc_public_route_table_a_id
   vpc_public_route_table_b_id = module.vpc.vpc_public_route_table_b_id
   vpc_internet_gateway_id     = module.vpc.vpc_internet_gateway_id
+  #variables
   tag_environment             = var.tag_environment
   cluster_name                = var.cluster_name
 }
@@ -29,6 +30,7 @@ module "elb" {
   elb_default_id              = module.elb.elb_default_id
   elb_default_tg_arn          = module.elb.elb_default_tg_arn
   elb_default_tg_id           = module.elb.elb_default_tg_id
+  # variables
   tag_environment             = var.tag_environment
   cluster_name                = var.cluster_name
 }
@@ -55,6 +57,7 @@ module "ec2" {
   vpc_id                               = module.vpc.vpc_id
   vpc_public_subnet_a_id               = module.vpc.vpc_public_subnet_a_id
   vpc_public_subnet_b_id               = module.vpc.vpc_public_subnet_b_id
+  # variables
   tag_environment                      = var.tag_environment
   cluster_name                         = var.cluster_name
 }

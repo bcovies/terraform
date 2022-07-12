@@ -130,12 +130,37 @@ resource "aws_autoscaling_policy" "ecs_auto_scaling_up_policy" {
   depends_on = [
     var.ecs_auto_scaling_group_id
   ]
-  name                   = "${var.tag_environment}-${var.cluster_name}-ecs-asg-up-policy"
+  name = "${var.tag_environment}-${var.cluster_name}-ecs-asg-up-policy"
   # policy_type            = "StepScaling"
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 60
   autoscaling_group_name = var.ecs_auto_scaling_group_name
+}
+
+#
+# Ecs Cluster AutoScaling CloudWatch Alarms Scaling Up Policy
+#
+resource "aws_cloudwatch_metric_alarm" "ecs_cloudwatch_scale_up_alarm" {
+  depends_on = [
+    var.ecs_auto_scaling_up_policy_id
+  ]
+  alarm_name                = "${var.tag_environment}-${var.cluster_name}-ecs-cw-scale-up-alarm"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  metric_name               = "CPUUtilization"
+  namespace                 = "AWS/EC2"
+  period                    = "120"
+  statistic                 = "Maximum"
+  threshold                 = "80"
+  alarm_description         = "This metric monitors ec2 cpu utilization"
+  insufficient_data_actions = []
+
+  dimensions = {
+    AutoScalingGroupName = var.ecs_auto_scaling_group_name
+  }
+
+  alarm_actions = [var.ecs_auto_scaling_up_policy_arn]
 }
 
 #
@@ -145,10 +170,35 @@ resource "aws_autoscaling_policy" "ecs_auto_scaling_down_policy" {
   depends_on = [
     var.ecs_auto_scaling_group_id
   ]
-  name                   = "${var.tag_environment}-${var.cluster_name}-ecs-asg-down-policy"
+  name = "${var.tag_environment}-${var.cluster_name}-ecs-asg-down-policy"
   # policy_type            = "StepScaling"
   scaling_adjustment     = -1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 60
   autoscaling_group_name = var.ecs_auto_scaling_group_name
+}
+
+#
+# Ecs Cluster AutoScaling CloudWatch Alarms Scaling Down Policy
+#
+resource "aws_cloudwatch_metric_alarm" "ecs_cloudwatch_scale_down_alarm" {
+  depends_on = [
+    var.ecs_auto_scaling_down_policy_id
+  ]
+  alarm_name                = "${var.tag_environment}-${var.cluster_name}-ecs-cw-scale-down-alarm"
+  comparison_operator       = "LessThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  metric_name               = "CPUUtilization"
+  namespace                 = "AWS/EC2"
+  period                    = "120"
+  statistic                 = "Maximum"
+  threshold                 = "20"
+  alarm_description         = "This metric monitors ec2 cpu utilization"
+  insufficient_data_actions = []
+
+  dimensions = {
+    AutoScalingGroupName = var.ecs_auto_scaling_group_name
+  }
+
+  alarm_actions = [var.ecs_auto_scaling_down_policy_arn]
 }
