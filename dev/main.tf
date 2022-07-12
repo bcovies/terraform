@@ -48,6 +48,10 @@ module "ec2" {
   ecs_launch_configuration_template_id = module.ec2.ecs_launch_configuration_template_id
   ecs_auto_scaling_group_name          = module.ec2.ecs_auto_scaling_group_name
   ecs_auto_scaling_group_id            = module.ec2.ecs_auto_scaling_group_id
+  ecs_auto_scaling_up_policy_id        = module.ec2.ecs_auto_scaling_up_policy_id
+  ecs_auto_scaling_up_policy_arn       = module.ec2.ecs_auto_scaling_up_policy_arn
+  ecs_auto_scaling_down_policy_arn     = module.ec2.ecs_auto_scaling_down_policy_arn
+  ecs_auto_scaling_down_policy_id      = module.ec2.ecs_auto_scaling_down_policy_id
   vpc_id                               = module.vpc.vpc_id
   vpc_public_subnet_a_id               = module.vpc.vpc_public_subnet_a_id
   vpc_public_subnet_b_id               = module.vpc.vpc_public_subnet_b_id
