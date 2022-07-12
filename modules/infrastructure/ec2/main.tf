@@ -73,6 +73,7 @@ resource "aws_launch_configuration" "ecs_launch_configuration_template" {
   key_name                    = var.ec2_key
   associate_public_ip_address = false
   enable_monitoring           = true
+  security_groups             = [var.ec2_public_ssh_sg_id]
   root_block_device {
     volume_type           = "gp3"
     volume_size           = 30
@@ -98,12 +99,56 @@ resource "aws_autoscaling_group" "ecs_auto_scaling_group" {
   ]
   name                      = "${var.tag_environment}-${var.cluster_name}-ecs-asg"
   max_size                  = 3
-  desired_capacity          = 2
+  desired_capacity          = 1
   min_size                  = 1
   health_check_grace_period = 300
-  health_check_type         = "ELB"
+  health_check_type         = "EC2"
   force_delete              = true
   launch_configuration      = var.ecs_launch_configuration_template_id
   vpc_zone_identifier       = [var.vpc_public_subnet_a_id, var.vpc_public_subnet_b_id]
+  tag {
+    key                 = "Name"
+    value               = "${var.tag_environment}-${var.cluster_name}-ecs-asg"
+    propagate_at_launch = true
+  }
+  tag {
+    key                 = "Environment"
+    value               = var.tag_environment
+    propagate_at_launch = true
+  }
+  tag {
+    key                 = "ClusterName"
+    value               = var.cluster_name
+    propagate_at_launch = true
+  }
 }
 
+#
+# Ecs Cluster AutoScaling Policy Add 1 Instance
+#
+resource "aws_autoscaling_policy" "ecs_auto_scaling_up_policy" {
+  depends_on = [
+    var.ecs_auto_scaling_group_id
+  ]
+  name                   = "${var.tag_environment}-${var.cluster_name}-ecs-asg-up-policy"
+  # policy_type            = "StepScaling"
+  scaling_adjustment     = 1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 60
+  autoscaling_group_name = var.ecs_auto_scaling_group_name
+}
+
+#
+# Ecs Cluster AutoScaling Policy Remove 1 Instance
+#
+resource "aws_autoscaling_policy" "ecs_auto_scaling_down_policy" {
+  depends_on = [
+    var.ecs_auto_scaling_group_id
+  ]
+  name                   = "${var.tag_environment}-${var.cluster_name}-ecs-asg-down-policy"
+  # policy_type            = "StepScaling"
+  scaling_adjustment     = -1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 60
+  autoscaling_group_name = var.ecs_auto_scaling_group_name
+}

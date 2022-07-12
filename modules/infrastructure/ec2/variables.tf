@@ -63,3 +63,11 @@ variable "ecs_cluster_name" {
 variable "ecs_launch_configuration_template_id" {
 
 }
+
+variable "ecs_auto_scaling_group_id" {
+
+}
+
+variable "ecs_auto_scaling_group_name" {
+
+}

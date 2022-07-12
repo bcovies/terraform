@@ -46,9 +46,11 @@ module "ec2" {
   ecs_cluster_id                       = module.ec2.ecs_cluster_id
   ecs_cluster_name                     = module.ec2.ecs_cluster_name
   ecs_launch_configuration_template_id = module.ec2.ecs_launch_configuration_template_id
+  ecs_auto_scaling_group_name          = module.ec2.ecs_auto_scaling_group_name
+  ecs_auto_scaling_group_id            = module.ec2.ecs_auto_scaling_group_id
   vpc_id                               = module.vpc.vpc_id
   vpc_public_subnet_a_id               = module.vpc.vpc_public_subnet_a_id
-  vpc_public_subnet_b_id      = module.vpc.vpc_public_subnet_b_id
+  vpc_public_subnet_b_id               = module.vpc.vpc_public_subnet_b_id
   tag_environment                      = var.tag_environment
   cluster_name                         = var.cluster_name
 }

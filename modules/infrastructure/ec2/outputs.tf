@@ -16,3 +16,11 @@ output "ecs_cluster_name" {
 output "ecs_launch_configuration_template_id" {
   value = aws_launch_configuration.ecs_launch_configuration_template.id
 }
+
+output "ecs_auto_scaling_group_id" {
+  value = aws_autoscaling_group.ecs_auto_scaling_group.id
+}
+
+output "ecs_auto_scaling_group_name" {
+  value = aws_autoscaling_group.ecs_auto_scaling_group.name
+}
