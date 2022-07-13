@@ -1,3 +1,6 @@
+#
+#   Default variables
+#
 variable "cluster_name" {
   description = "Environment that all services are hosted | DEV | STAGE | PROD |"
   type        = string
@@ -10,6 +13,9 @@ variable "tag_environment" {
   default     = "dev"
 }
 
+#
+# VPC variables
+#
 
 variable "vpc_cidr_block_external" {
   type    = string
@@ -20,10 +26,6 @@ variable "vpc_id" {
 
 }
 
-variable "elb_public_http_https_sg_id" {
-
-}
-
 variable "vpc_public_subnet_a_id" {
 
 }
@@ -31,6 +33,14 @@ variable "vpc_public_subnet_a_id" {
 variable "vpc_public_subnet_b_id" {
 
 }
+
+variable "elb_public_http_https_sg_id" {
+
+}
+
+#
+# ELB variables
+#
 
 variable "elb_default_arn" {
 

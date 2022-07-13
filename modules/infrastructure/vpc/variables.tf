@@ -1,3 +1,6 @@
+#
+#   Default variables
+#
 variable "cluster_name" {
   description = "Environment that all services are hosted | DEV | STAGE | PROD |"
   type        = string
@@ -10,6 +13,9 @@ variable "tag_environment" {
   default     = "dev"
 }
 
+#
+# VPC variables
+#
 variable "vpc_cidr_block" {
   description = "Classes Inter-Domain Routing that is used to the cluster."
   type        = string
