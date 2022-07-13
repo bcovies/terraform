@@ -21,10 +21,12 @@ module "elb" {
   depends_on = [
     module.vpc
   ]
-  source                      = "../modules/infrastructure/elb"
-  vpc_id                      = module.vpc.vpc_id
-  vpc_public_subnet_a_id      = module.vpc.vpc_public_subnet_a_id
-  vpc_public_subnet_b_id      = module.vpc.vpc_public_subnet_b_id
+  source = "../modules/infrastructure/elb"
+  # VPC
+  vpc_id                 = module.vpc.vpc_id
+  vpc_public_subnet_a_id = module.vpc.vpc_public_subnet_a_id
+  vpc_public_subnet_b_id = module.vpc.vpc_public_subnet_b_id
+  # ALB
   elb_public_http_https_sg_id = module.elb.elb_public_http_https_sg_id
   elb_default_arn             = module.elb.elb_default_arn
   elb_default_id              = module.elb.elb_default_id
@@ -43,10 +45,13 @@ module "ec2" {
     module.vpc,
     module.elb
   ]
-  source                               = "../modules/infrastructure/ec2"
-  ec2_public_ssh_sg_id                 = module.ec2.ec2_public_ssh_sg_id
-  ecs_cluster_id                       = module.ec2.ecs_cluster_id
-  ecs_cluster_name                     = module.ec2.ecs_cluster_name
+  source = "../modules/infrastructure/ec2"
+  # EC2
+  ec2_public_ssh_sg_id = module.ec2.ec2_public_ssh_sg_id
+  # ECS
+  ecs_cluster_id   = module.ec2.ecs_cluster_id
+  ecs_cluster_name = module.ec2.ecs_cluster_name
+  # AutoScaling
   ecs_launch_configuration_template_id = module.ec2.ecs_launch_configuration_template_id
   ecs_auto_scaling_group_name          = module.ec2.ecs_auto_scaling_group_name
   ecs_auto_scaling_group_id            = module.ec2.ecs_auto_scaling_group_id
@@ -54,9 +59,10 @@ module "ec2" {
   ecs_auto_scaling_up_policy_arn       = module.ec2.ecs_auto_scaling_up_policy_arn
   ecs_auto_scaling_down_policy_arn     = module.ec2.ecs_auto_scaling_down_policy_arn
   ecs_auto_scaling_down_policy_id      = module.ec2.ecs_auto_scaling_down_policy_id
-  vpc_id                               = module.vpc.vpc_id
-  vpc_public_subnet_a_id               = module.vpc.vpc_public_subnet_a_id
-  vpc_public_subnet_b_id               = module.vpc.vpc_public_subnet_b_id
+  # VPC
+  vpc_id                 = module.vpc.vpc_id
+  vpc_public_subnet_a_id = module.vpc.vpc_public_subnet_a_id
+  vpc_public_subnet_b_id = module.vpc.vpc_public_subnet_b_id
   # variables
   tag_environment = var.tag_environment
   cluster_name    = var.cluster_name
@@ -72,6 +78,8 @@ module "ecs" {
     module.ec2
   ]
   source = "../modules/backend/ecs"
+  # ECS
+  ecs_cluster_id = module.ec2.ecs_cluster_id
   # variables
   tag_environment = var.tag_environment
   cluster_name    = var.cluster_name

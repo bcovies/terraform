@@ -14,7 +14,7 @@ variable "tag_environment" {
 }
 
 #
-#   Task Definitions Variables
+# ECS Task Definitions Variables
 #
 variable "ecs_task_definition_family" {
   type    = string
@@ -37,7 +37,7 @@ variable "ecs_task_definition_network_mode" {
 }
 
 #
-#   Container Definitions Variables
+# ECS Task Definitions Variables
 #
 variable "ecs_task_definition_container_definition_name" {
   type    = string
@@ -73,3 +73,7 @@ variable "ecs_task_definition_container_definition_host_port" {
   type    = number
   default = 80
 }
+
+#
+# ECS Service Variables
+#
