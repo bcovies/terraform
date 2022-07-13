@@ -10,8 +10,8 @@ module "vpc" {
   vpc_public_route_table_b_id = module.vpc.vpc_public_route_table_b_id
   vpc_internet_gateway_id     = module.vpc.vpc_internet_gateway_id
   #variables
-  tag_environment             = var.tag_environment
-  cluster_name                = var.cluster_name
+  tag_environment = var.tag_environment
+  cluster_name    = var.cluster_name
 }
 
 #
@@ -31,8 +31,8 @@ module "elb" {
   elb_default_tg_arn          = module.elb.elb_default_tg_arn
   elb_default_tg_id           = module.elb.elb_default_tg_id
   # variables
-  tag_environment             = var.tag_environment
-  cluster_name                = var.cluster_name
+  tag_environment = var.tag_environment
+  cluster_name    = var.cluster_name
 }
 
 #
@@ -58,6 +58,18 @@ module "ec2" {
   vpc_public_subnet_a_id               = module.vpc.vpc_public_subnet_a_id
   vpc_public_subnet_b_id               = module.vpc.vpc_public_subnet_b_id
   # variables
-  tag_environment                      = var.tag_environment
-  cluster_name                         = var.cluster_name
+  tag_environment = var.tag_environment
+  cluster_name    = var.cluster_name
+}
+
+#
+# M O D U L E    E C S    C L U S T E R
+#
+module "ecs" {
+  depends_on = [
+    module.vpc,
+    module.elb,
+    module.ec2
+  ]
+  source = "../modules/backend/ecs"
 }
