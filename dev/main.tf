@@ -72,4 +72,7 @@ module "ecs" {
     module.ec2
   ]
   source = "../modules/backend/ecs"
+  # variables
+  tag_environment = var.tag_environment
+  cluster_name    = var.cluster_name
 }
