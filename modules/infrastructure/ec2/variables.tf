@@ -1,3 +1,6 @@
+#
+#   Default variables
+#
 variable "cluster_name" {
   description = "Environment that all services are hosted | DEV | STAGE | PROD |"
   type        = string
@@ -10,6 +13,29 @@ variable "tag_environment" {
   default     = "dev"
 }
 
+#
+# VPC variables
+#
+variable "vpc_cidr_block_external" {
+  type    = string
+  default = "0.0.0.0/0"
+}
+
+variable "vpc_id" {
+
+}
+
+variable "vpc_public_subnet_a_id" {
+
+}
+
+variable "vpc_public_subnet_b_id" {
+
+}
+
+#
+# EC2 General Variables
+#
 variable "ec2_ami" {
   type = map(any)
   default = {
@@ -27,10 +53,6 @@ variable "ec2_instance_type" {
   default = "t2.micro"
 }
 
-variable "vpc_cidr_block_external" {
-  type    = string
-  default = "0.0.0.0/0"
-}
 
 variable "ec2_key" {
   default = "brunosouto-key"
@@ -40,17 +62,6 @@ variable "ec2_public_ssh_sg_id" {
 
 }
 
-variable "vpc_id" {
-
-}
-
-variable "vpc_public_subnet_a_id" {
-
-}
-
-variable "vpc_public_subnet_b_id" {
-
-}
 
 variable "ecs_cluster_id" {
 
@@ -59,6 +70,8 @@ variable "ecs_cluster_id" {
 variable "ecs_cluster_name" {
 
 }
+
+# EC2 AutoScaling Variables
 
 variable "ecs_launch_configuration_template_id" {
 
