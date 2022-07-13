@@ -1,7 +1,7 @@
 #
 #   ECS TASK DEFINITION   
 #
-resource "aws_ecs_task_definition" "service" {
+resource "aws_ecs_task_definition" "ecs_task_definition" {
   family       = var.ecs_task_definition_family
   cpu          = var.ecs_task_definition_cpu
   memory       = var.ecs_task_definition_memory
