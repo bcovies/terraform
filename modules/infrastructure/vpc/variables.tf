@@ -39,13 +39,13 @@ variable "vpc_cidr_block_external" {
 
 variable "az0" {
   type    = string
-  default = "us-east-1a"
+  default = "us-west-1a"
 }
 
 
 variable "az1" {
   type    = string
-  default = "us-east-1b"
+  default = "us-west-1c"
 }
 
 variable "vpc_id" {

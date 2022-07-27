@@ -1,0 +1,23 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - START_TIME=$(echo $CODEBUILD_START_TIME | cut -c 1-7)
+      - IMAGE_TAG=${START_TIME:=latest}
+      - TAG="latest"
+  pre_build:
+    commands:
+      - cd $CODEBUILD_SRC_DIR_App/backend
+      - docker build --tag "${REPOSITORY_URI}:${TAG}" .
+      - docker tag $REPOSITORY_URI:$TAG $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      - docker push "${REPOSITORY_URI}:${TAG}"
+      - docker push "${REPOSITORY_URI}:${IMAGE_TAG}"
+      - printf '{"tag":"%s:%s"}' "$REPOSITORY_URI" "$IMAGE_TAG" > /tmp/build.json
+      - cat /tmp/build.json
+artifacts:
+  files: 
+    - /tmp/build.json
+  discard-paths: yes
