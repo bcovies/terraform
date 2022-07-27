@@ -46,19 +46,9 @@ module "ec2" {
     module.elb
   ]
   source = "../modules/infrastructure/ec2"
-  # EC2
-  ec2_public_ssh_sg_id = module.ec2.ec2_public_ssh_sg_id
   # ECS
   ecs_cluster_id   = module.ec2.ecs_cluster_id
   ecs_cluster_name = module.ec2.ecs_cluster_name
-  # AutoScaling
-  ecs_launch_configuration_template_id = module.ec2.ecs_launch_configuration_template_id
-  ecs_auto_scaling_group_name          = module.ec2.ecs_auto_scaling_group_name
-  ecs_auto_scaling_group_id            = module.ec2.ecs_auto_scaling_group_id
-  ecs_auto_scaling_up_policy_id        = module.ec2.ecs_auto_scaling_up_policy_id
-  ecs_auto_scaling_up_policy_arn       = module.ec2.ecs_auto_scaling_up_policy_arn
-  ecs_auto_scaling_down_policy_arn     = module.ec2.ecs_auto_scaling_down_policy_arn
-  ecs_auto_scaling_down_policy_id      = module.ec2.ecs_auto_scaling_down_policy_id
   # VPC
   vpc_id                 = module.vpc.vpc_id
   vpc_public_subnet_a_id = module.vpc.vpc_public_subnet_a_id
@@ -69,18 +59,34 @@ module "ec2" {
 }
 
 #
-# M O D U L E    E C S    C L U S T E R
+# M O D U L E    P I P E L I N E 
 #
-module "ecs" {
+module "backend_pipeline" {
+
   depends_on = [
     module.vpc,
     module.elb,
     module.ec2
   ]
-  source = "../modules/backend/ecs"
-  # ECS
-  ecs_cluster_id = module.ec2.ecs_cluster_id
+
+  source = "../modules/pipelines"
+
   # variables
   tag_environment = var.tag_environment
   cluster_name    = var.cluster_name
+  region          = var.region
+  # VPC
+  vpc_id = module.vpc.vpc_id
+  # Pipeline Variables
+  app_gitHub_token    = "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"
+  app_gitHub_owner    = "my-digital-waiter"
+  app_gitHub_repo     = "terraform-infra"
+  app_gitHub_branch   = "devops"
+  infra_gitHub_token  = "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"
+  infra_gitHub_owner  = "my-digital-waiter"
+  infra_gitHub_repo   = "terraform-infra"
+  infra_gitHub_branch = "devops"
+  AlbHealthCheckPath  = ""
+  # CodeBuild Variables
+  buildspec_path = "buildspec/build-backend.yml"
 }
